@@ -1,0 +1,100 @@
+version: "3.3"
+services:
+
+  api:
+    container_name: api
+    image: node
+    ports:
+      - 3000
+    networks:
+      - data-network
+    volumes:
+      - .:/api
+    working_dir: /api
+    command: ['npm', 'start']
+
+  mysql:
+    container_name: database-mysql
+    image: mysql
+    platform: linux/amd64
+    restart: always
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=example"
+      - "MYSQL_USER=example"
+      - "MYSQL_PASSWORD=secretPassword!@#"
+    ports:
+      - 3306
+    networks:
+      - data-network
+    volumes:
+      - data-logs:/var/log
+      - data-mysql:/var/lib/mysql
+
+  postgres:
+    container_name: database-postgres
+    image: postgres
+    restart: always
+    environment:
+      - "POSTGRES_USER=root"
+      - "POSTGRES_PASSWORD=secretPassword!@#"
+    ports:
+      - 5432
+    networks:
+      - data-network
+    volumes:
+      - data-logs:/var/log
+      - data-postgres:/data
+
+  mongo:
+    container_name: database-mongo
+    image: mongo
+    restart: always
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=root"
+      - "MONGO_INITDB_ROOT_PASSWORD=secretPassword!@#"
+    ports:
+      - 27017
+    networks:
+      - data-network
+    volumes:
+      - data-logs:/var/log
+      - data-mongo:/data/db
+
+  redis:
+    container_name: database-redis
+    image: redis
+    restart: always
+    ports:
+      - 6379
+    networks:
+      - data-network
+    volumes:
+      - data-logs:/var/log
+      - data-redis:/data
+
+  sqlserver:
+    container_name: database-sqlserver
+    image: mcr.microsoft.com/azure-sql-edge
+    # image: mcr.microsoft.com/mssql/server
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "MSSQL_SA_PASSWORD=secretPassword!@#"
+    ports:
+      - 1433
+    networks:
+      - data-network
+    volumes:
+      - data-logs:/var/log
+      - data-sqlserver:/var/opt/mssql
+
+volumes:
+  data-logs: {}
+  data-mysql: {}
+  data-redis: {}
+  data-postgres: {}
+  data-mongo: {}
+  data-sqlserver: {}
+
+networks:
+  data-network: {}
