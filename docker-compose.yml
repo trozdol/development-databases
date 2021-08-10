@@ -36,7 +36,7 @@ services:
     image: postgres
     restart: always
     environment:
-      - "POSTGRES_USER=root"
+      - "POSTGRES_USER=example"
       - "POSTGRES_PASSWORD=secretPassword!@#"
     ports:
       - 5432
@@ -51,7 +51,7 @@ services:
     image: mongo
     restart: always
     environment:
-      - "MONGO_INITDB_ROOT_USERNAME=root"
+      - "MONGO_INITDB_ROOT_USERNAME=example"
       - "MONGO_INITDB_ROOT_PASSWORD=secretPassword!@#"
     ports:
       - 27017
